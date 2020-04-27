@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -14,12 +15,19 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TEXT_STATE = "CurrentText";
     private TextView mTextView = null;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mTextView=(TextView)findViewById(R.id.textView1);
+
+        progressBar = findViewById(R.id.progress_bar);
+        progressBar.setIndeterminate(false);
+        progressBar.setProgress(0);
+        progressBar.setMax(10);
 
         if(savedInstanceState!= null){
             mTextView.setText(savedInstanceState.getString(TEXT_STATE));
@@ -28,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void startTask(View view) {
         mTextView.setText(R.string.napping);
-        new SimpleAsyncTask(mTextView).execute();
+        SimpleAsyncTask task = new SimpleAsyncTask(mTextView,progressBar);
+        task.execute();
     }
 
     @Override
